@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net20</TargetFrameworks>
+    <TargetFrameworks>net35</TargetFrameworks>
     <RootNamespace>HoLLy.Memory</RootNamespace>
     <Version>0.1.0</Version>
     <Authors>HoLLy</Authors>
