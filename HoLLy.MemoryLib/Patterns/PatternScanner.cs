@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.InteropServices;
 
 namespace HoLLy.Memory.Patterns
 {
@@ -22,10 +20,9 @@ namespace HoLLy.Memory.Patterns
         {
             result = IntPtr.Zero;
             var handle = abs.Handle;
-            foreach (Native.MemoryBasicInformation mbi in EnumerateMemoryRegions(handle).Where(a => a.State == Native.MemoryState.MemCommit)) {
+            foreach (var mbi in NativeHelper.EnumerateMemoryRegions(handle).Where(a => a.State == Native.MemoryState.MemCommit))
                 if (Scan(handle, pattern, new IntPtr((long)mbi.BaseAddress), (int)mbi.RegionSize, out result))
                     return true;
-            }
 
             return false;
         }
@@ -44,13 +41,12 @@ namespace HoLLy.Memory.Patterns
         {
             result = IntPtr.Zero;
             var handle = abs.Handle;
-            foreach (Native.MemoryBasicInformation mbi in EnumerateMemoryRegions(handle).Where(a =>
+            foreach (var mbi in NativeHelper.EnumerateMemoryRegions(handle, MaxAddress).Where(a =>
                 a.Type == memType
                 && a.Protect == memProtect
-                && a.State == Native.MemoryState.MemCommit)) {
+                && a.State == Native.MemoryState.MemCommit))
                 if (Scan(handle, pattern, new IntPtr((long)mbi.BaseAddress), (int)mbi.RegionSize, out result))
                     return true;
-            }
 
             return false;
         }
@@ -119,22 +115,9 @@ namespace HoLLy.Memory.Patterns
 #if DEBUG
         public static void PrintMemoryRegions(IntPtr handle)
         {
-            foreach (var region in EnumerateMemoryRegions(handle))
+            foreach (var region in NativeHelper.EnumerateMemoryRegions(handle, MaxAddress))
                 Console.WriteLine($"{region.BaseAddress:X8} - {region.BaseAddress + region.RegionSize:X8}: {region.State} / {region.Protect}");
         }
 #endif
-
-        private static IEnumerable<Native.MemoryBasicInformation> EnumerateMemoryRegions(IntPtr handle)
-        {
-            long address = 0;
-            do
-            {
-                int result = Native.VirtualQueryEx(handle, (IntPtr)address, out Native.MemoryBasicInformation m, (uint)Marshal.SizeOf(typeof(Native.MemoryBasicInformation)));
-                yield return m;
-                if (address == (long)m.BaseAddress + (long)m.RegionSize)
-                    break;
-                address = (long)m.BaseAddress + (long)m.RegionSize;
-            } while (address <= MaxAddress);
-        }
     }
 }

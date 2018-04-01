@@ -11,27 +11,41 @@ namespace HoLLy.Memory
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern IntPtr OpenProcess(ProcessAccessFlags dwDesiredAccess, int bInheritHandle, uint dwProcessId);
 
-        [DllImport("kernel32.dll")]
-        public static extern int VirtualQueryEx(IntPtr hProcess, IntPtr lpAddress, out MemoryBasicInformation lpBuffer, uint dwLength);
+        [DllImport("kernel32.dll", EntryPoint = "VirtualQueryEx")]
+        public static extern int VirtualQueryEx32(IntPtr hProcess, IntPtr lpAddress, out MemoryBasicInformation32 lpBuffer, uint dwLength);
 
-        //TODO: assuming a 64 bit process!
+        [DllImport("kernel32.dll", EntryPoint = "VirtualQueryEx")]
+        public static extern int VirtualQueryEx64(IntPtr hProcess, IntPtr lpAddress, out MemoryBasicInformation64 lpBuffer, uint dwLength);
+
+        [DllImport("kernel32.dll", CallingConvention = CallingConvention.Winapi)]
+        public static extern bool IsWow64Process(IntPtr processHandle, out bool wow64Process);
+
+        //for 32-bit processes
         [StructLayout(LayoutKind.Sequential)]
-        public struct MemoryBasicInformation
+        public struct MemoryBasicInformation32
         {
-#if x86
-            //for 32-bit osu!
-            public IntPtr BaseAddress;
+            public IntPtr BaseAddress;  //TODO: prob uint instead of IntPtr
             public IntPtr AllocationBase;
+            /// <summary>
+            /// The memory protection option when the region was initially allocated. This member is 0 if the caller 
+            /// does not have access.
+            /// </summary>
             public AllocationProtect AllocationProtect;
             public IntPtr RegionSize;
+            /// <summary> The state of the pages in the region. </summary>
             public MemoryState State;
+            /// <summary> The access protection of the pages in the region. </summary>
             public AllocationProtect Protect;
+            /// <summary> The type of pages in the region. </summary>
             public MemoryType Type;
-#else
-            //for 64-bit osu!
+        }
+        
+        //for 64-bit processes
+        [StructLayout(LayoutKind.Sequential)]
+        public struct MemoryBasicInformation64
+        {
             public ulong BaseAddress;
             public ulong AllocationBase;
-
             /// <summary>
             /// The memory protection option when the region was initially allocated. This member is 0 if the caller 
             /// does not have access.
@@ -39,17 +53,13 @@ namespace HoLLy.Memory
             public AllocationProtect AllocationProtect;
             private int _alignment1;
             public ulong RegionSize;
-
             /// <summary> The state of the pages in the region. </summary>
             public MemoryState State;
-
             /// <summary> The access protection of the pages in the region. </summary>
             public AllocationProtect Protect;
-
             /// <summary> The type of pages in the region. </summary>
             public MemoryType Type;
             private int _alignment2;
-#endif
         }
 
         [Flags]
