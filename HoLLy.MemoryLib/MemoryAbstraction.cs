@@ -3,7 +3,7 @@ using System.Text;
 
 namespace HoLLy.Memory
 {
-    internal class MemoryAbstraction
+    public class MemoryAbstraction
     {
         internal IntPtr Handle { get; }
 

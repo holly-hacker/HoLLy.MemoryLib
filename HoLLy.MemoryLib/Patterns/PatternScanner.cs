@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace HoLLy.Memory.Patterns
 {
-    internal static class SigScanner
+    public static class SigScanner
     {
         private const int ScanStep = 0x1000;
         private const long MaxAddress = 0x7fffffff;

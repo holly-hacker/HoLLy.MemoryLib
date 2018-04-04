@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace HoLLy.Memory
 {
-    internal static class NativeHelper
+    public static class NativeHelper
     {
         public static bool Is64BitProcess() => IntPtr.Size == 8;
         public static bool Is64BitProcess(IntPtr handle) => Is64BitMachine() && !IsWow64Process(handle);

@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace HoLLy.Memory
 {
-    internal static class Native
+    public static class Native
     {
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, [Out] byte[] lpBuffer, int dwSize, out IntPtr lpNumberOfBytesRead);
