@@ -28,7 +28,7 @@ namespace HoLLy.Memory.Patterns
         }
 
         /// <summary>
-        /// Scans a memory section for a pattern, only looking in memory regions matching the given 
+        /// Scans a memory section for a pattern, only looking in memory regions matching the given
         /// <paramref name="memType"/> and <paramref name="memProtect"/>.
         /// </summary>
         /// <param name="abs">A <see cref="MemoryAbstraction"/> instance of the process to scan</param>
@@ -63,19 +63,13 @@ namespace HoLLy.Memory.Patterns
         public static bool Scan(IntPtr handle, PatternByte[] pattern, IntPtr baseAddress, int size, out IntPtr result)
         {
             //TODO: ready for 64-bit
-            uint step = (uint)Math.Max(size, ScanStep);
+            uint step = (uint)Math.Min(size, ScanStep);
             uint min = (uint)baseAddress.ToInt32();
             uint max = (uint)(min + size);
             byte[] buffer = new byte[step + pattern.Length - 1];
 
             //skip wildcards, since they would always match
-            uint firstNonWildcard = 0;
-            for (uint i = 0; i < pattern.Length; ++i)
-            {
-                if (pattern[i].Skip) continue;
-                firstNonWildcard = i;
-                break;
-            }
+            uint firstNonWildcard = PatternByte.FirstNonWildcardByte(pattern);
 
             var sw = new Stopwatch();
             sw.Start();
@@ -93,7 +87,7 @@ namespace HoLLy.Memory.Patterns
                     //loop through pattern
                     for (uint k = firstNonWildcard; k < pattern.Length; ++k)
                     {
-                        if (pattern[k].Skip || buffer[j + k] == pattern[k].Val) continue;
+                        if (pattern[k].Match(buffer[j + k])) continue;
                         match = false;
                         break;
                     }
@@ -102,7 +96,7 @@ namespace HoLLy.Memory.Patterns
                     {
                         result = (IntPtr)(i + j);
                         sw.Stop();
-                        Console.WriteLine("Stopwatch sigscan: " + sw.Elapsed);
+                        Debug.WriteLine("Stopwatch sigscan: " + sw.Elapsed);
                         return true;
                     }
                 }
@@ -112,12 +106,11 @@ namespace HoLLy.Memory.Patterns
             return false;
         }
 
-#if DEBUG
+        [Conditional("DEBUG")]
         public static void PrintMemoryRegions(IntPtr handle)
         {
             foreach (var region in NativeHelper.EnumerateMemoryRegions(handle, MaxAddress))
                 Console.WriteLine($"{region.BaseAddress:X8} - {region.BaseAddress + region.RegionSize:X8}: {region.State} / {region.Protect}");
         }
-#endif
     }
 }

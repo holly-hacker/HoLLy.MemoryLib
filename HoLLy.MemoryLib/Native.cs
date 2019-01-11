@@ -27,7 +27,7 @@ namespace HoLLy.Memory
             public IntPtr BaseAddress;  //TODO: prob uint instead of IntPtr
             public IntPtr AllocationBase;
             /// <summary>
-            /// The memory protection option when the region was initially allocated. This member is 0 if the caller 
+            /// The memory protection option when the region was initially allocated. This member is 0 if the caller
             /// does not have access.
             /// </summary>
             public AllocationProtect AllocationProtect;
@@ -39,7 +39,7 @@ namespace HoLLy.Memory
             /// <summary> The type of pages in the region. </summary>
             public MemoryType Type;
         }
-        
+
         //for 64-bit processes
         [StructLayout(LayoutKind.Sequential)]
         public struct MemoryBasicInformation64
@@ -47,7 +47,7 @@ namespace HoLLy.Memory
             public ulong BaseAddress;
             public ulong AllocationBase;
             /// <summary>
-            /// The memory protection option when the region was initially allocated. This member is 0 if the caller 
+            /// The memory protection option when the region was initially allocated. This member is 0 if the caller
             /// does not have access.
             /// </summary>
             public AllocationProtect AllocationProtect;
@@ -105,22 +105,22 @@ namespace HoLLy.Memory
         public enum MemoryState : uint
         {
             /// <summary>
-            /// Indicates committed pages for which physical storage has been allocated, either in memory or in the 
+            /// Indicates committed pages for which physical storage has been allocated, either in memory or in the
             /// paging file on disk.
             /// </summary>
             MemCommit = 0x1000,
 
             /// <summary>
-            /// Indicates reserved pages where a range of the process's virtual address space is reserved without any 
-            /// physical storage being allocated. For reserved pages, the information in the 
+            /// Indicates reserved pages where a range of the process's virtual address space is reserved without any
+            /// physical storage being allocated. For reserved pages, the information in the
             /// <see cref="MemoryBasicInformation.Protect"/> member is undefined.
             /// </summary>
             MemReserved = 0x2000,
 
             /// <summary>
-            /// Indicates free pages not accessible to the calling process and available to be allocated. For free 
-            /// pages, the information in the <see cref="MemoryBasicInformation.AllocationBase"/>, 
-            /// <see cref="MemoryBasicInformation.AllocationProtect"/>, <see cref="MemoryBasicInformation.Protect"/>, 
+            /// Indicates free pages not accessible to the calling process and available to be allocated. For free
+            /// pages, the information in the <see cref="MemoryBasicInformation.AllocationBase"/>,
+            /// <see cref="MemoryBasicInformation.AllocationProtect"/>, <see cref="MemoryBasicInformation.Protect"/>,
             /// and <see cref="MemoryBasicInformation.Type"/> members is undefined.
             /// </summary>
             MemFree = 0x10000,

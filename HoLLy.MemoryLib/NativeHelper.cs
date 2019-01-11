@@ -11,7 +11,7 @@ namespace HoLLy.Memory
         public static bool Is64BitProcess(IntPtr handle) => Is64BitMachine() && !IsWow64Process(handle);
         public static bool Is64BitMachine() => Is64BitProcess() || IsWow64Process(Process.GetCurrentProcess().Handle);
         public static bool IsWow64Process(IntPtr handle) => Native.IsWow64Process(handle, out bool wow64) && wow64;
-        
+
         public static IEnumerable<MemoryInfo> EnumerateMemoryRegions(IntPtr handle, long maxSize = int.MaxValue)
         {
             long address = 0;
@@ -19,7 +19,7 @@ namespace HoLLy.Memory
             {
                 int result;
                 MemoryInfo m;
-                if (Is64BitProcess(handle)) {
+                if (Is64BitProcess(handle)) {    // TODO: can cache this
                     result = Native.VirtualQueryEx64(handle, (IntPtr)address, out Native.MemoryBasicInformation64 m64, (uint)Marshal.SizeOf(typeof(Native.MemoryBasicInformation64)));
                     m = new MemoryInfo(m64);
                 } else {

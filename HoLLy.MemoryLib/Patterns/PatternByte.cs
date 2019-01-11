@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace HoLLy.Memory.Patterns
 {
-    public class PatternByte
+    public struct PatternByte
     {
         public byte Val;
         public bool Skip;
 
-        //this is likely too slow to be used in the actual pattern scanner
-        //public bool Match(byte b) => Skip || b == Val;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool Match(byte b) => Skip || b == Val;
 
         private static PatternByte Normal(byte b) => new PatternByte { Val = b };
         private static PatternByte Wildcard => new PatternByte { Skip = true };
@@ -32,6 +33,19 @@ namespace HoLLy.Memory.Patterns
                     : Wildcard;
 
             return arr;
+        }
+
+        public static uint FirstNonWildcardByte(PatternByte[] pattern)
+        {
+            uint firstNonWildcard = 0;
+            for (uint i = 0; i < pattern.Length; ++i)
+            {
+                if (pattern[i].Skip) continue;
+                firstNonWildcard = i;
+                break;
+            }
+
+            return firstNonWildcard;
         }
 
         public override string ToString() => Skip ? "??" : Val.ToString("X2");

@@ -5,7 +5,7 @@ namespace HoLLy.Memory
 {
     public class MemoryAbstraction
     {
-        internal IntPtr Handle { get; }
+        public IntPtr Handle { get; }
 
         public MemoryAbstraction(IntPtr handle) => Handle = handle;
 
