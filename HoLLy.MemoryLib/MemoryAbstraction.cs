@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
+using HoLLy.Memory.OOP;
 
 namespace HoLLy.Memory
 {
@@ -30,20 +32,19 @@ namespace HoLLy.Memory
         /// <returns></returns>
         public string ReadDotNetString(IntPtr address)
         {
-            var vtable = ReadIntPtr(address);
-            var len = ReadInt(new IntPtr(vtable.ToInt64() + 0x4));
-            var buffer = ReadBytes(new IntPtr(vtable.ToInt64() + 0x8), len * 2);  //NOTE: not correct for codepoints larger than 2 bytes!
+            var pVTable = ReadIntPtr(address);
+            var len = ReadInt(pVTable + 0x4);
+            var buffer = ReadBytes(pVTable + 0x8, len * 2);  //NOTE: not correct for codepoints larger than 2 bytes!
             return Encoding.Unicode.GetString(buffer);
         }
 
-        /*
         public List<T> ReadDotNetList<T>(IntPtr address) where T : StructureBase
         {
-            var vtable = ReadIntPtr(address);
-            var arrBase = ReadIntPtr(vtable + 0x4) + 0x8;
-            var size = ReadInt(vtable + 0xC);
+            var pVTable = ReadIntPtr(address);
+            var arrBase = ReadIntPtr(pVTable + 0x4) + 0x8;
+            var size = ReadInt(pVTable + 0xC);
 
-            //for speed, we'll read the entire chunk at once and then read the pointers from it
+            // For speed, we'll read the entire chunk at once and then read the pointers from it
             List<T> l = new List<T>(size);
             byte[] arrData = ReadBytes(arrBase, size * 4);
             for (int i = 0; i < size; i++)
@@ -54,7 +55,6 @@ namespace HoLLy.Memory
 
             return l;
         }
-        */
 
         public byte[] ReadBytes(IntPtr address, int size)
         {
