@@ -15,11 +15,12 @@ namespace HoLLy.Memory
         public static IEnumerable<MemoryInfo> EnumerateMemoryRegions(IntPtr handle, long maxSize = int.MaxValue)
         {
             long address = 0;
+            bool x64 = Is64BitProcess(handle);
             do
             {
                 int result;
                 MemoryInfo m;
-                if (Is64BitProcess(handle)) {    // TODO: can cache this
+                if (x64) {
                     result = Native.VirtualQueryEx64(handle, (IntPtr)address, out Native.MemoryBasicInformation64 m64, (uint)Marshal.SizeOf(typeof(Native.MemoryBasicInformation64)));
                     m = new MemoryInfo(m64);
                 } else {
