@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using HoLLy.Memory.Input;
 
 namespace HoLLy.Memory
 {
@@ -19,6 +20,9 @@ namespace HoLLy.Memory
 
         [DllImport("kernel32.dll", CallingConvention = CallingConvention.Winapi)]
         public static extern bool IsWow64Process(IntPtr processHandle, out bool wow64Process);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        internal static extern uint SendInput(uint numberOfInputs, InputStruct[] inputs, int sizeOfInputStructure);
 
         //for 32-bit processes
         [StructLayout(LayoutKind.Sequential)]
@@ -120,8 +124,8 @@ namespace HoLLy.Memory
             /// <summary>
             /// Indicates free pages not accessible to the calling process and available to be allocated. For free
             /// pages, the information in the <see cref="MemoryBasicInformation.AllocationBase"/>,
-            /// <see cref="MemoryBasicInformation.AllocationProtect"/>, <see cref="MemoryBasicInformation.Protect"/>,
-            /// and <see cref="MemoryBasicInformation.Type"/> members is undefined.
+            /// <see cref="AllocationProtect"/>, <see cref="MemoryBasicInformation.Protect"/>,
+            /// and <see cref="Type"/> members is undefined.
             /// </summary>
             MemFree = 0x10000,
         }
