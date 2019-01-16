@@ -36,5 +36,8 @@ internal class MyExternalObject : StructureBase
 }
 ```
 
+### Input Simulation
+You can send keystrokes to the target process through a light wrapper over SendInput.
+
 ## License
 This project is licensed under the permissive MIT license.
