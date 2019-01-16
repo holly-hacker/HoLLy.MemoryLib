@@ -7,7 +7,11 @@
     <Company>HoLLy</Company>
     <Description>A memory library</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net461</TargetFramework>
+    <PackageProjectUrl>https://github.com/HoLLy-HaCKeR/HoLLy.MemoryLib</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/HoLLy-HaCKeR/HoLLy.MemoryLib/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/HoLLy-HaCKeR/HoLLy.MemoryLib</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
