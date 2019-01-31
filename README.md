@@ -1,8 +1,8 @@
 # HoLLy.MemoryLib
 A C# memory-accessing library
 
-## Warning
-This is not meant to be a general-purpose library. It is not meant to have a stable API or be feature-complete. This
+## Disclaimer
+This is not meant to be a general-purpose library. This is not meant to have a stable API or be feature-complete. This
 is simply what I used or needed in some of my projects. I'm not interested in PRs or issues related to feature requests,
 and no support will be given.
 
