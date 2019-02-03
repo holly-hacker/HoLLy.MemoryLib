@@ -42,6 +42,8 @@ namespace HoLLy.Memory.OOP
 
         //prefetched
         protected IntPtr Pointer(int offset) => Prefetched ? new IntPtr(BitConverter.ToInt32(_prefetchedBytes, offset)) : Memory.ReadIntPtr(Offset(offset));
+        protected byte Byte(int offset) => Prefetched ? _prefetchedBytes[offset] : Memory.ReadByte(Offset(offset));
+        protected short Short(int offset) => Prefetched ? BitConverter.ToInt16(_prefetchedBytes, offset) : Memory.ReadShort(Offset(offset));
         protected int Int(int offset) => Prefetched ? BitConverter.ToInt32(_prefetchedBytes, offset) : Memory.ReadInt(Offset(offset));
         protected float Float(int offset) => Prefetched ? BitConverter.ToSingle(_prefetchedBytes, offset) : Memory.ReadFloat(Offset(offset));
         protected double Double(int offset) => Prefetched ? BitConverter.ToDouble(_prefetchedBytes, offset) : Memory.ReadDouble(Offset(offset));
